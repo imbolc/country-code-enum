@@ -1,0 +1,40 @@
+[package]
+description = "Copyable Serde and Sqlx compatible country codes"
+edition = "2021"
+license = "MIT"
+name = "country-code-enum"
+repository = "https://github.com/imbolc/country-code-enum"
+version = "0.1.0"
+
+[features]
+ci = []                      # used to configure CI behavior
+serde = ["dep:serde"]
+sqlx-postgres = ["dep:sqlx"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"], optional = true }
+sqlx = { version = "0.8", features = ["postgres"], optional = true }
+
+[dev-dependencies]
+serde_json = "1"
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+future_incompatible = "forbid"
+keyword_idents = "forbid"
+let_underscore = "forbid"
+missing_docs = "forbid"
+nonstandard_style = "forbid"
+refining_impl_trait = "forbid"
+rust_2018_compatibility = "forbid"
+rust_2018_idioms = "forbid"
+rust_2021_compatibility = "forbid"
+rust_2024_compatibility = "forbid"
+unreachable_pub = { level = "warn", priority = -1 }
+unused = { level = "warn", priority = -1 }
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
