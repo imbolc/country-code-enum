@@ -6,6 +6,50 @@
 
 Copyable Serde and Sqlx compatible country codes
 
+```rust
+use country_code_enum::CountryCode;
+
+let argentina: CountryCode = "AR".parse().unwrap();
+assert_eq!(argentina, CountryCode::AR);
+assert_eq!(argentina.as_ref(), "AR");
+assert_eq!(argentina.name(), "Argentina");
+```
+
+## Serde
+
+```rust
+use country_code_enum::CountryCode;
+
+#[cfg(feature = "serde")]
+{
+    let argentina: CountryCode = serde_json::from_str("\"AR\"").unwrap();
+    assert_eq!(argentina, CountryCode::AR);
+    assert_eq!(serde_json::to_string(&argentina).unwrap(), "\"AR\"");
+}
+```
+
+## Sqlx
+
+```rust,ignore
+use country_code_enum::CountryCode;
+
+async fn sqlx_example(pool: sqlx::PgPool) {
+    let argentina = sqlx::query_scalar!(r#"SELECT 'AR'::varchar as "val: CountryCode""#)
+        .fetch_one(&pool)
+        .await
+        .unwrap()
+        .unwrap();
+    assert_eq!(argentina, CountryCode::AR);
+
+    let s = sqlx::query_scalar!("SELECT $1::varchar", argentina as _)
+        .fetch_one(&pool)
+        .await
+        .unwrap()
+        .unwrap();
+    assert_eq!(s, "AR");
+}
+```
+
 
 ## Contributing
 
