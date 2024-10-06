@@ -19,7 +19,7 @@ macro_rules! define_country_codes {
 
         impl CountryCode {
             /// All possible country codes
-            pub const ALL: [CountryCode; 249] = [$(CountryCode::$code, )*];
+            pub const ALL: [CountryCode; 250] = [$(CountryCode::$code, )*];
 
             /// Returns the country name in English
             #[must_use]
@@ -326,6 +326,7 @@ define_country_codes! {
     (VU, "Vanuatu"),
     (WF, "Wallis and Futuna"),
     (WS, "Samoa"),
+    (XK, "Republic of Kosovo"),
     (YE, "Yemen"),
     (YT, "Mayotte"),
     (ZA, "South Africa"),
@@ -377,7 +378,7 @@ mod tests {
         let mut all: Vec<_> = CountryCode::ALL.iter().collect();
         all.sort();
         all.dedup();
-        assert_eq!(all.len(), 249);
+        assert_eq!(all.len(), 250);
     }
 
     #[test]
@@ -387,6 +388,6 @@ mod tests {
             CountryCode::AD,
             "first"
         );
-        assert_eq!(CountryCode::iter().count(), 249, "count");
+        assert_eq!(CountryCode::iter().count(), 250, "count");
     }
 }
