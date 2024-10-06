@@ -7,7 +7,6 @@ repository = "https://github.com/imbolc/country-code-enum"
 version = "0.1.0"
 
 [features]
-ci = []                      # used to configure CI behavior
 serde = ["dep:serde"]
 sqlx-postgres = ["dep:sqlx"]
 

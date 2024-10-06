@@ -37,7 +37,6 @@ impl<'r> Decode<'r, Postgres> for CountryCode {
 }
 
 #[cfg(test)]
-#[cfg(not(feature = "ci"))]
 mod tests {
     use sqlx::PgPool;
 
