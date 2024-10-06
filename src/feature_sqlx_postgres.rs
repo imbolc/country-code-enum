@@ -2,7 +2,7 @@ use std::error::Error;
 
 use sqlx::{
     encode::IsNull,
-    postgres::{PgArgumentBuffer, PgTypeInfo, PgValueRef},
+    postgres::{PgArgumentBuffer, PgHasArrayType, PgTypeInfo, PgValueRef},
     Decode, Encode, Postgres, Type,
 };
 
@@ -11,6 +11,12 @@ use super::CountryCode;
 impl Type<Postgres> for CountryCode {
     fn type_info() -> PgTypeInfo {
         PgTypeInfo::with_name("varchar")
+    }
+}
+
+impl PgHasArrayType for CountryCode {
+    fn array_type_info() -> PgTypeInfo {
+        PgTypeInfo::with_name("_varchar")
     }
 }
 
