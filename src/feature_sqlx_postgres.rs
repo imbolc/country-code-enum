@@ -20,7 +20,7 @@ impl PgHasArrayType for CountryCode {
     }
 }
 
-impl<'r> Encode<'r, Postgres> for CountryCode {
+impl Encode<'_, Postgres> for CountryCode {
     fn encode_by_ref(
         &self,
         buf: &mut PgArgumentBuffer,
@@ -45,10 +45,10 @@ mod tests {
     #[sqlx::test]
     async fn encode(pool: PgPool) -> sqlx::Result<()> {
         let country_code: CountryCode = "AR".parse().unwrap();
-        let encoded = sqlx::query_scalar!("SELECT $1::varchar", country_code as _)
+        let encoded: String = sqlx::query_scalar("SELECT $1::varchar")
+            .bind(country_code)
             .fetch_one(&pool)
-            .await?
-            .unwrap();
+            .await?;
         assert_eq!(encoded, "AR");
         Ok(())
     }
@@ -56,10 +56,9 @@ mod tests {
     #[sqlx::test]
     async fn decode(pool: PgPool) -> sqlx::Result<()> {
         let country_code: CountryCode = "AR".parse().unwrap();
-        let decoded = sqlx::query_scalar!(r#"SELECT 'AR'::varchar as "val: CountryCode""#)
+        let decoded: CountryCode = sqlx::query_scalar("SELECT 'AR'::varchar")
             .fetch_one(&pool)
-            .await?
-            .unwrap();
+            .await?;
         assert_eq!(decoded, country_code);
         Ok(())
     }
@@ -67,7 +66,7 @@ mod tests {
     #[sqlx::test]
     async fn decode_error(pool: PgPool) -> sqlx::Result<()> {
         assert!(
-            sqlx::query_scalar!(r#"SELECT 'BAD'::varchar as "val: CountryCode""#)
+            sqlx::query_scalar::<sqlx::Postgres, CountryCode>("SELECT 'BAD'::varchar")
                 .fetch_one(&pool)
                 .await
                 .is_err()
